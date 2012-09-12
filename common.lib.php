@@ -5,10 +5,6 @@ function loginFB() {
   //print_r($facebook);
   if(!$facebook->getUser()) header("Location:".$facebook->getLoginUrl(array('scope' => 'publish_stream')));
 }
-
-function postOnWall($description = NULL, $link, $message) {
-  global $facebook;
-  try {                                                                                                                       
     $ret_obj = $facebook->api('/me/feed', 'POST',   
 			      array(
 				    'description' => $description,
@@ -17,8 +13,8 @@ function postOnWall($description = NULL, $link, $message) {
 				    ));
   } catch(FacebookApiException $e) 
       { 
-		$login_url = $facebook->getLoginUrl(array('scope' => 'publish_stream' )); 
-		echo 'Please <a href="' . $login_url . '">login.</a>';  error_log($e->getType()); error_log($e->getMessage());
+	$login_url = $facebook->getLoginUrl(array('scope' => 'publish_stream' )); 
+	echo 'Please <a href="' . $login_url . '">login.</a>';  error_log($e->getType()); error_log($e->getMessage());
       }
 }
 
@@ -93,7 +89,10 @@ function init() {
       echo json_encode($data);
       exit();
     }
-  $userId = insertUserDetails();
+  $userId=insertUserDetails();
+  
+  exit();
+  header("Location: http://delta.nitt.edu");
 }
 
 ?>
