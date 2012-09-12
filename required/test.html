@@ -1,0 +1,48 @@
+<html>
+ <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# festember: http://ogp.me/ns/fb/festember#">
+  <meta property="fb:app_id" content="263593520331172" /> 
+  <meta property="og:url"    content="http://delta.nitt.edu/~steve/test.html" />
+  <meta property="og:type"   content="festember:game" /> 
+
+  <meta property="og:title"  content="game1" /> 
+  <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" /> 
+</head>
+ <body>
+     <script type="text/javascript">
+window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '263593520331172', // App ID
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+    };
+       (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+       }(document)); 
+
+       function postCook()
+       {
+       FB.api(
+       '/me/festember:play?access_token=AAADvvKYkZBaQBAEBgUmstjhsxyQ4zwd0KhAnwCFHFLvIaiFHzKpDkzPYU3UBGF4xuHMfhZCh1TcEmSBQ7PkknhfLtRZBGhuiGvxQYOEebXDMEbrzeUQ',
+       'post',
+       { website: 'http://delta.nitt.edu/~steve/qwe.html' },
+        function(response) {
+       if (!response || response.error) {
+       alert('Error occured');
+       } else {
+       alert('Cook was successful! Action ID: ' + response.id);
+           }
+       });
+       }
+     </script>
+     <div id="fb-root"></div>
+   <form>
+     <input type="button" value="Cook" onclick="postCook()" />
+   </form>
+ </body>
+</html>
