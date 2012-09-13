@@ -24,7 +24,6 @@ else if(isset($_POST['game_highscore']))
     exit();
   }
 
-
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
   /* respond to ajax here..*/
   $actions = array('saveScore'=>array('method'=>'savescore'),
@@ -41,6 +40,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 	}
 	
 } else {
+<<<<<<< HEAD
+=======
+
+  print_r ($_GET);
+>>>>>>> 4264f4d3195a5b48549c921c7bddcf6702c83d77
   
   if(!isset($_GET['page']) || empty($_GET['page'])) {
     @include_once './inc/common/header.inc.php';
@@ -65,4 +69,4 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
   }
   @include_once './inc/common/footer.inc.php';
   
-  }
+ }

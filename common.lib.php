@@ -2,12 +2,13 @@
 
 function loginFB() {
   global $facebook;
-  //  print_r($facebook);
+  //print_r($facebook);
   if(!$facebook->getUser()) header("Location:".$facebook->getLoginUrl(array('scope' => 'publish_stream')));
 }
-function postOnWall($description,$link,$message) {
+
+function postOnWall($description = NULL, $link, $message) {
   global $facebook;
-  try{
+  try {                                                                                                                       
     $ret_obj = $facebook->api('/me/feed', 'POST',   
 			      array(
 				    'description' => $description,
@@ -66,20 +67,30 @@ function fetchhighscore(){
 		while($ans = mysql_fetch_assoc($result)){
 			$list[] = $ans;
 		}
-		return json_encode($list);
+		echo json_encode($list);
 	}
 	return 0;
 }
 
+<<<<<<< HEAD
 function generatemetatags($gamePage){
   $appId=APP_ID;
+=======
+function generatemetatags(){
+  global $facebook;
+>>>>>>> 4264f4d3195a5b48549c921c7bddcf6702c83d77
   $title = ucfirst($_GET['page']);
 	echo <<< END_TXT
 <!DOCTYPE>
 <html>	  
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# festember: http://ogp.me/ns/fb/festember#">
+<<<<<<< HEAD
   <meta property="fb:app_id" content="{$appId}" />
   <meta property="og:url"    content="{$_SERVER['REDIRECT_SCRIPT_URI']}" />
+=======
+  <meta property="fb:app_id" content="{APP_ID}" />
+  <meta property="og:url"    content="{$_SERVER[PHP_SELF]}" />
+>>>>>>> 4264f4d3195a5b48549c921c7bddcf6702c83d77
   <meta property="og:type"   content="festember:game" />
   <meta property="og:title"  content="{$title}" />
   <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
@@ -89,6 +100,39 @@ END_TXT;
 
 </head>
 <body>
+<script type="text/javascript">
+window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{APP_ID}', // App ID
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+    };
+       (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+       }(document)); 
+
+       function postCook()
+       {
+       FB.api(
+       '/me/festember:play?access_token={$facebook->getAccessToken()}',
+       'post',
+       { website: '{$_SERVER[PHP_SELF]}' },
+        function(response) {
+       if (!response || response.error) {
+       alert('Error occured');
+       } else {
+       alert('Cook was successful! Action ID: ' + response.id);
+           }
+       });
+       }
+     </script>
+     <div id="fb-root"></div>
 <div id="body">
 
 END_TXT;
@@ -100,7 +144,6 @@ END_TXT;
 function init($game_id) {
   global $facebook;
   $data = array();
-  
   if(!$facebook->getUser()) loginFB();
   if(!$facebook->getUser())
     {
