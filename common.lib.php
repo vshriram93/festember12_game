@@ -17,8 +17,8 @@ function postOnWall($description = NULL, $link, $message) {
 				    ));
   } catch(FacebookApiException $e) 
       { 
-		$login_url = $facebook->getLoginUrl(array('scope' => 'publish_stream' )); 
-		echo 'Please <a href="' . $login_url . '">login.</a>';  error_log($e->getType()); error_log($e->getMessage());
+	$login_url = $facebook->getLoginUrl(array('scope' => 'publish_stream' )); 
+ 	echo 'Please <a href="' . $login_url . '">login.</a>';  error_log($e->getType()); error_log($e->getMessage());
       }
 }
 
@@ -36,8 +36,8 @@ function insertUserDetails()
   if(mysql_num_rows($checkExistRes)) return true;
   $insertUserDetailQuery="INSERT INTO `fb_user_detail` (`fb_id`,`fb_user_name`,`fb_email`) VALUES ({$FBid},'{$FBUserName}','{$FBEmail}')";
   $insertUserDetailRes=mysql_query($insertUserDetailQuery); 
-	print_r($userProfile);
-	postOnWall("Festember Games","festember.in","Testing");
+  print_r($userProfile);
+  postOnWall("Festember Games","festember.in","Testing");
   return true;
   
 }
@@ -80,8 +80,24 @@ function fetchhighscore(){
 }
 
 function generatemetatags(){
-	$url = $_SERVER['REQUEST_URI'];
-	
+  $title = ucfirst($_GET['page']);
+	echo <<< END_TXT
+<!DOCTYPE>
+<html>	  
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# festember: http://ogp.me/ns/fb/festember#">
+  <meta property="fb:app_id" content="{APP_ID}" />
+  <meta property="og:url"    content="{$_SERVER['PHP_SELF']}" />
+  <meta property="og:type"   content="festember:game" />
+  <meta property="og:title"  content="{$title}" />
+  <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
+</head>
+<body>
+<div id="body">
+
+END_TXT;
+
+	return $head;
+
 }
 
 function init() {
@@ -94,7 +110,11 @@ function init() {
       echo json_encode($data);
       exit();
     }
-  $userId = insertUserDetails();
+  $userId=insertUserDetails();
+  echo "<br/>hello";
+  echo $facebook->getAccessToken()."<br/>";
+  exit();
+  header("Location: http://delta.nitt.edu");
 }
 
 ?>
