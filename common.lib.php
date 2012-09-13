@@ -74,7 +74,7 @@ function fetchhighscore(){
 		while($ans = mysql_fetch_assoc($result)){
 			$list[] = $ans;
 		}
-		return json_encode($list);
+		echo json_encode($list);
 	}
 	return 0;
 }
