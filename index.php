@@ -7,8 +7,22 @@ $facebook = new Facebook(array(
 			       'secret' => APP_SECRET, 									
 	     	));
 require_once("common.lib.php");
-//init();
-
+if(isset($_POST['game_start'])&&isset($_POST['game_id']))
+  {
+    init($_POST['game_id']);
+    exit();
+  }
+else if(isset($_POST['game_end'])&&isset($_POST['game_score'])&&isset($_POST['game_id']))
+  {
+    savescore();
+    echo fetchhighscore();
+    exit();
+  }
+else if(isset($_POST['game_highscore']))
+  {
+    echo fetchhighscore();
+    exit();
+  }
 
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -27,7 +41,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 	}
 	
 } else {
-  print_r ($_GET);
   
   if(!isset($_GET['page']) || empty($_GET['page'])) {
     @include_once './inc/common/header.inc.php';
@@ -37,12 +50,14 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo "</div>";
   }	
   elseif(file_exists('./games/'.$_GET['page'].'/index.html')) {
-    generatemetatag();
+    generatemetatags($_GET['page']);
     echo "<div id='contents'>";
     include_once './games/'.$_GET['page'].'/index.html';
+    include_once './required/activity.php';
+
     echo "</div>";
   } else {
-     @include_once './inc/common/header.inc.php';
+    @include_once './inc/common/header.inc.php';
     @include_once './inc/common/menu.inc.php';
     echo "<div id='contents'>";
     echo "404, File Not Found";

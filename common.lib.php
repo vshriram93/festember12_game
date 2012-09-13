@@ -1,6 +1,5 @@
 <?php
 
-
 function loginFB() {
   global $facebook;
   //  print_r($facebook);
@@ -33,10 +32,14 @@ function insertUserDetails()
   $FBEmail = $userProfile['username'];
   $checkExistQuery = "SELECT * FROM `fb_user_detail` WHERE `fb_id`={$userProfile['id']}";
   $checkExistRes = mysql_query($checkExistQuery);
-  if(mysql_num_rows($checkExistRes)) return true;
+  if(mysql_num_rows($checkExistRes)) 
+    {
+      
+      return true;
+    }
   $insertUserDetailQuery="INSERT INTO `fb_user_detail` (`fb_id`,`fb_user_name`,`fb_email`) VALUES ({$FBid},'{$FBUserName}','{$FBEmail}')";
   $insertUserDetailRes=mysql_query($insertUserDetailQuery); 
-  print_r($userProfile);
+  //  print_r($userProfile);
   postOnWall("Festember Games","festember.in","Testing");
   return true;
   
@@ -45,22 +48,11 @@ function insertUserDetails()
 function savescore(){
 	$game_id = htmlentities($_POST['game_id']);
 	$game_high_score =  htmlentities($_POST['game_score']);
-	$description = htmlentities($_POST['description']);
-	
-	if(!empty($description) || $description!=""){
-		postOnWall("description", "link", "message");
-	}
-	
   	global $facebook;
   	$userProfile = $facebook->api('/me');
 	
 	$query = "INSERT INTO `fb_score_detail` (`fb_user_id`, `game_id`, `game_high_score`, `game_timestamp`) VALUES ('".$userProfile['id']."'', '".$game_id."', '".$game_high_score."', CURRENT_TIMESTAMP)";
 	$result = mysql_query($query) or die(mysql_error());
-	if($result):
-		echo 1;
-	else: 
-		echo 0;
-	endif;
 }
 
 function fetchhighscore(){
@@ -79,17 +71,22 @@ function fetchhighscore(){
 	return 0;
 }
 
-function generatemetatags(){
+function generatemetatags($gamePage){
+  $appId=APP_ID;
   $title = ucfirst($_GET['page']);
 	echo <<< END_TXT
 <!DOCTYPE>
 <html>	  
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# festember: http://ogp.me/ns/fb/festember#">
-  <meta property="fb:app_id" content="{APP_ID}" />
-  <meta property="og:url"    content="{$_SERVER['PHP_SELF']}" />
+  <meta property="fb:app_id" content="{$appId}" />
+  <meta property="og:url"    content="{$_SERVER['REDIRECT_SCRIPT_URI']}" />
   <meta property="og:type"   content="festember:game" />
   <meta property="og:title"  content="{$title}" />
   <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
+END_TXT;
+	include_once './games/'.$gamePage.'/head';
+	echo <<< END_TXT
+
 </head>
 <body>
 <div id="body">
@@ -100,7 +97,7 @@ END_TXT;
 
 }
 
-function init() {
+function init($game_id) {
   global $facebook;
   $data = array();
   
@@ -112,8 +109,8 @@ function init() {
       exit();
     }
   $userId=insertUserDetails();
-  echo "<br/>hello";
-  echo $facebook->getAccessToken()."<br/>";
+ // echo "<br/>hello";
+  //echo $facebook->getAccessToken()."<br/>";
   exit();
   header("Location: http://delta.nitt.edu");
 }
