@@ -80,18 +80,52 @@ function fetchhighscore(){
 }
 
 function generatemetatags(){
+  global $facebook;
   $title = ucfirst($_GET['page']);
 	echo <<< END_TXT
 <!DOCTYPE>
 <html>	  
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# festember: http://ogp.me/ns/fb/festember#">
   <meta property="fb:app_id" content="{APP_ID}" />
-  <meta property="og:url"    content="{$_SERVER['PHP_SELF']}" />
+  <meta property="og:url"    content="{$_SERVER[PHP_SELF]}" />
   <meta property="og:type"   content="festember:game" />
   <meta property="og:title"  content="{$title}" />
   <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
 </head>
 <body>
+<script type="text/javascript">
+window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{APP_ID}', // App ID
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+    };
+       (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+       }(document)); 
+
+       function postCook()
+       {
+       FB.api(
+       '/me/festember:play?access_token={$facebook->getAccessToken()}',
+       'post',
+       { website: '{$_SERVER[PHP_SELF]}' },
+        function(response) {
+       if (!response || response.error) {
+       alert('Error occured');
+       } else {
+       alert('Cook was successful! Action ID: ' + response.id);
+           }
+       });
+       }
+     </script>
+     <div id="fb-root"></div>
 <div id="body">
 
 END_TXT;
