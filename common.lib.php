@@ -81,6 +81,7 @@ function fetchhighscore(){
 
 function generatemetatags(){
 	$url = $_SERVER['REQUEST_URI'];
+	
 }
 
 function init() {
